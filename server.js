@@ -47,8 +47,19 @@ const server = app.listen(process.env.PORT || 3000, () => {
 // mit dem Befehl node .\server.js in dem Terminal kann man den Server starten, mit strg+c kann man diesen wieder stoppen
 
 app.get('/',(req, res, next) => {
+
+    
+    1+(req.cookies['istAngemeldetAls']){
+
+    }
+
     res.render('index.ejs', {
 
     })
 })
+
+app.get('/login',(req,res,next)->{
+    res.reader('login.ejs',(
+    })
+
 
