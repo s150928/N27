@@ -2,8 +2,11 @@ class Konto{
     constructor(){
         this.Kontonummer
         this.Kontoart
+        this.Iban
     }
 }
+
+const iban = require('iban')
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -14,8 +17,13 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser())
 
 const server = app.listen(process.env.PORT || 3000, () => {
+
+// Ausgabe von 'Server laucht...' im Terminal
+
     console.log('Server lauscht auf Port %s', server.address().port)    
 })
+
+// Die app.get('/'...) word abgearbeitet, wenn die Startseite im Browser aufgerufen wird.
 
 app.get('/',(req, res, next) => {   
 
@@ -40,7 +48,7 @@ app.get('/impressum',(req, res, next) => {
     if(idKunde){
         console.log("Kunde ist angemeldet als " + idKunde)
         
-        //... dann wird impressum.ejs gerendert.
+//... dann wird impressum.ejs gerendert.
 
         res.render('impressum.ejs', {                              
         })
@@ -83,7 +91,7 @@ app.get('/kontoAnlegen',(req, res, next) => {
     if(idKunde){
         console.log("Kunde ist angemeldet als " + idKunde)
 
-        // ... dann wird deie kontoAnlegen.ejs gerendert.
+// ... dann wird deie kontoAnlegen.ejs gerendert.
 
         res.render('kontoAnlegen.ejs', {   
             meldung : ""                            
@@ -104,13 +112,24 @@ app.post('/kontoAnlegen',(req, res, next) => {
         console.log("Kunde ist angemeldet als " + idKunde)
 
         let konto = new Konto()
+
+// Der Wert aus dem Input mit dem Namen 'kontonummer' wird zugewiesen (=) an die Eigenschaft Kontonummer des Objeks namens konto.
+
         konto.Kontonummer = req.body.kontonummer
         konto.Kontoart = req.body.kontoart
+        const bankleitzahl = 27000000
+        const laenderkennung = "DE"
+        konto.Iban = iban.fromBBAN(laenderkennung, bankleitzahl + " " + konto.Kontonummer) 
+
+// ... wird die kontoAnlegen.ejs gerendert.
 
         res.render('kontoAnlegen.ejs', {   
             meldung : "Das Konto " + konto.Kontonummer + "  wurde erfolgreich als " + konto.Kontoart + " angelegt."                           
         })
     }else{
+
+// Die login.ejs wird gerendert und als Response an den Browser übergeben.
+
         res.render('login.ejs', {                    
         })    
     }
