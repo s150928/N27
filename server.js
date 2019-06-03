@@ -135,6 +135,45 @@ app.get('/kontoAnlegen',(req, res, next) => {
     }
 })
 
+app.get('/stammdatenPflegen',(req, res, next)=> {
+    
+    let idKunde = req.cookies['istAngemeldetAls']
+
+    if(idKunde){
+        console.log("Kunde ist angemeldet als" + idKunde)
+
+        res.render('stammdatenPflegen.ejs', {
+            meldung : ""
+        })
+    }else{
+        res.render('login.ejs', {
+
+        })
+    }
+})
+
+app.post('/stammdatenPflegen',(req, res, next) => {
+
+    let idKunde = req.cookies['istAngemeldetAls']
+    
+    if(idKunde){
+        console.log("Kunde ist angemeldet als " + idKunde)
+        
+        kunde.Nachname = req.body.nachname
+        kunde.Kennwort = req.body.kennwort
+        kunde.Addresse = req.body.addresse
+        kunde.Geschlecht = req.body.geschlecht
+
+        res.render('stammdatenPflegen.ejs', {   
+            meldung : "Die Stammdaten wurden aktualisiert."
+        })
+    }else{
+
+        res.render('login.ejs', {                    
+        })    
+    }
+})
+
 // Wenn der Button auf der kontoAnlegen-Seite gedrückt wird, ...
 
 app.post('/kontoAnlegen',(req, res, next) => {   
