@@ -9,23 +9,23 @@ const server = app.listen(process.env.PORT || 3000, () => {
     console.log('Server lauscht auf Port %s', server.address().port)    
 })
 
-// Eine KLasse ist ein Baupla. Der Bauplan sieht vor, wie Objekte erstellt werden. 
-// Alle Objekte die von einem Bauplan erstellt werden, habene die selben Eigenschaften, aber 
-// möglicherweise unterschiedliche Eigenschaftswerte.
+// Eine Klasse ist ein Bauplan. Der Bauplan sieht vor, wie Objekte erstellt werden.
+// Alle Objekte, die von einem Bauplan erstellt werden, haben die selben Eigenschaften,
+// aber möglicherweise unterschiedliche Eigenschaftswerte.
 
-// Klassendefinition
-// =================
+// Klassendefintion
+// ================
 
-class Rechteck {
+class Rechteck{
     constructor(){
         this.laenge
         this.breite
     }
 }
 
-// Klassendefinition für Schüler in einer Schule: 
+// Klassendefinition für Schüler in einer Schule:
 
-class Schueler {
+class Schueler{
     constructor(){
         this.geschlecht
         this.klasse
@@ -35,14 +35,12 @@ class Schueler {
     }
 }
 
-
-class Auto {
+class Fussballer{
     constructor(){
-        this.model
-        this.baujahr
-        this.leistung
-        this.zustand
-        this.preis
+        this.vorname 
+        this.nachname
+        this.mannschaft
+        this.geschlecht
     }
 }
 
@@ -50,32 +48,31 @@ class Auto {
 // Deklaration = Bekanntmachung
 // let rechteck = ...
 
-// Instanziierung eines neuen Objekts
-// Instanziierng erkennt man im reservierten Wort "new"
-// Bei der Instanziierung wird Arbeitsspeicher bereitgestellt
+// Instanziierung eines neuen Objekts.
+// Instanziierung erkennt man immer am reservierten Wort "new".
+// Bei der Instanziierung wird Arbeitsspeicher bereitgestellt.
 // ... = new Rechteck()
 
-// 1. Deklaration 2. Instanziierung 
+// 1.Deklaration  2.Instanziierung
 let rechteck = new Rechteck()
 let schueler = new Schueler()
-let auto = new Auto()
+let fussballer = new Fussballer()
 
-// 3. Initianisierung (Konkrete Eigenschaftswerte werden zugewiesen)
+
+// 3. Initialisierung (Konkrete Eingeschaftswerte werden zugewiesen)
 
 rechteck.breite = 2
 rechteck.laenge = 3
 
-console.log("Länge:" + rechteck.laenge)
-console.log("Breite:" + rechteck.breite)
-
 schueler.geschlecht = "w"
 schueler.alter = 17
 
-auto.leistung = "250 ps"
-auto.model = "Ford Mustang"
-auto.baujahr = 1965
-auto.zustand = "unfallfrei"
-auto.preis = "35.000 €"
+fussballer.mannschaft = "FC Borken"
+fussballer.vorname = "Firke"
+
+console.log("Länge: " + rechteck.laenge)
+console.log("Breite: " + rechteck.breite)
+
 
 // Wenn localhost:3000/klasse-objekt-ejs-trainieren aufgerufen wird ...
 
@@ -83,16 +80,12 @@ app.get('/klasse-objekt-ejs-trainieren',(req, res, next) => {
 
     // ... wird klasse-objekt-ejs-trainieren.ejs gerendert:
 
-    res.render('klasse-objekt-ejs-trainieren', {     
-        breite : rechteck.breite,    
-        laenge : rechteck.laenge,    
+    res.render('klasse-objekt-ejs-trainieren', {                                      
+        breite : rechteck.breite,
+        laenge : rechteck.laenge,
         geschlecht : schueler.geschlecht,
         alter : schueler.alter,
-        leistung : auto.leistung,
-        model : auto.model,
-        baujahr : auto.baujahr,
-        zustand : auto.zustand,
-        preis : auto.preis    
-
+        vorname : fussballer.vorname,
+        mannschaft : fussballer.mannschaft
     })
 })

@@ -1,5 +1,5 @@
 {
-  "name": "n27",
+  "name": "n27gw11a",
   "version": "1.0.0",
   "description": "Meine tolle Smartphone-BANK",
   "main": "server.js",
@@ -17,9 +17,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://s150928@bitbucket.org/s150928/n27.git"
+    "url": "git+https://stbaeumer@bitbucket.org/stbaeumer/n27gw11a.git"
   },
-  "author": "Ben",
+  "author": "Stefan",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/s150928/n27#readme"
+  "homepage": "https://bitbucket.org/stbaeumer/n27gw11a#readme"
 }

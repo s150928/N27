@@ -8,31 +8,30 @@ class Konto{
 
 // Klassendefinition
 
-class Kunde{
+class Kunde {
     constructor(){
-        this.Nachname
+        this.IdKunde
+        this.Kennwort
         this.Vorname
         this.Geburtsdatum
-        this.IdKunde
-        this.Addresse
-        this.Geschlecht
-        this.Kennwort
+        this.Nachname
+        this.Adresse
+        this.Geschlecht        
     }
 }
 
-// Deklaration / Instanziierung
+// Deklaration und Instanziierung
 
-let kunde = new Kunde ()
+let kunde = new Kunde()
 
-// Initialisierung 
+// Initialisierung
 
 kunde.IdKunde = 4711
 kunde.Kennwort = "123"
-kunde.Vorname = "Jordan"
-kunde.Nachname = "Belfort"
-kunde.Geburtstag = "1962-7-9"
-kunde.Addresse = "Wallstreet 1"
-kunde.Geschlecht = "m"
+kunde.Geburtsdatum = "1999-12-31"
+kunde.Nachname = "Müller"
+kunde.Vorname = "Hildegard"
+kunde.Geschlecht = "w"
 
 const iban = require('iban')
 const express = require('express')
@@ -46,12 +45,11 @@ app.use(cookieParser())
 
 const server = app.listen(process.env.PORT || 3000, () => {
 
-// Ausgabe von 'Server laucht...' im Terminal
-
+    // Ausgabe von 'Server lauscht ...' im Terminal
     console.log('Server lauscht auf Port %s', server.address().port)    
 })
 
-// Die app.get('/'...) word abgearbeitet, wenn die Startseite im Browser aufgerufen wird.
+// Wenn die Startseite im Browser aufgerufen wird, ...
 
 app.get('/',(req, res, next) => {   
 
@@ -67,7 +65,7 @@ app.get('/',(req, res, next) => {
     }
 })
 
-// Wenn die Seite localhost:3000/impressum aufgerufen wird,...
+// Wenn die Seite localhost:3000/impressum aufgerufen wird, ...
 
 app.get('/impressum',(req, res, next) => {   
 
@@ -76,8 +74,8 @@ app.get('/impressum',(req, res, next) => {
     if(idKunde){
         console.log("Kunde ist angemeldet als " + idKunde)
         
-//... dann wird impressum.ejs gerendert.
-
+        // ... dann wird impressum.ejs gerendert.
+        
         res.render('impressum.ejs', {                              
         })
     }else{
@@ -93,19 +91,23 @@ app.get('/login',(req, res, next) => {
 })
 
 app.post('/',(req, res, next) => {   
-
-// Der Wert das Inputs mit dem name = "Idkunde" wird über den Request zugewiesen an die Konstante idKunde
     
+    // Der Wert des Inputs mit dem name = "idkunde" wird über
+    // den Request zugewiesen an die Konstante idKunde
     const idKunde = req.body.idKunde
     const kennwort = req.body.kennwort
+    
+    console.log(idKunde + " == " + kunde.IdKunde + "&&" + kennwort + " == " + kunde.Kennwort)
 
-// Wenn der Wert von idKunde dem Wert der Eigenschaft kunde.IdKunde etnspricht UND der Wer von kennwort der Eigenschaft kunde.Kennwort 
-// entspricht, dann werden die Anweisungen im Rumpf der if-Kontrollstrunktur abgearbteit 
-        
+    // Wenn der Wert von idKunde dem Wert der Eigenschaft kunde.IdKunde
+    // entspricht UND der Wert von kennwort der Eigenschaft kunde.Kennwort
+    // entspricht, dann werden die Anweisungen im Rumpf der if-Kontrollstruktur
+    // abgearbeitet.
     if(idKunde == kunde.IdKunde && kennwort == kunde.Kennwort){            
         console.log("Der Cookie wird gesetzt:")
         res.cookie('istAngemeldetAls', idKunde)
-        res.render('index.ejs', {           
+        res.render('index.ejs', {  
+            kunde : idKunde          
         })
     }else{            
         console.log("Der Cookie wird gelöscht")
@@ -123,52 +125,13 @@ app.get('/kontoAnlegen',(req, res, next) => {
     
     if(idKunde){
         console.log("Kunde ist angemeldet als " + idKunde)
-
-// ... dann wird deie kontoAnlegen.ejs gerendert.
-
-        res.render('kontoAnlegen.ejs', {   
-            meldung : ""                            
-        })
-    }else{
-        res.render('login.ejs', {                    
-        })    
-    }
-})
-
-app.get('/stammdatenPflegen',(req, res, next)=> {
-    
-    let idKunde = req.cookies['istAngemeldetAls']
-
-    if(idKunde){
-        console.log("Kunde ist angemeldet als" + idKunde)
-
-        res.render('stammdatenPflegen.ejs', {
-            meldung : ""
-        })
-    }else{
-        res.render('login.ejs', {
-
-        })
-    }
-})
-
-app.post('/stammdatenPflegen',(req, res, next) => {
-
-    let idKunde = req.cookies['istAngemeldetAls']
-    
-    if(idKunde){
-        console.log("Kunde ist angemeldet als " + idKunde)
         
-        kunde.Nachname = req.body.nachname
-        kunde.Kennwort = req.body.kennwort
-        kunde.Addresse = req.body.addresse
-        kunde.Geschlecht = req.body.geschlecht
-
-        res.render('stammdatenPflegen.ejs', {   
-            meldung : "Die Stammdaten wurden aktualisiert."
+        // ... dann wird kontoAnlegen.ejs gerendert.
+        
+        res.render('kontoAnlegen.ejs', {    
+            meldung : ""                          
         })
     }else{
-
         res.render('login.ejs', {                    
         })    
     }
@@ -182,27 +145,70 @@ app.post('/kontoAnlegen',(req, res, next) => {
     
     if(idKunde){
         console.log("Kunde ist angemeldet als " + idKunde)
-
+        
         let konto = new Konto()
 
-// Der Wert aus dem Input mit dem Namen 'kontonummer' wird zugewiesen (=) an die Eigenschaft Kontonummer des Objeks namens konto.
-
+        // Der Wert aus dem Input mit dem Namen 'kontonummer'
+        // wird zugewiesen (=) an die Eigenschaft Kontonummer
+        // des Objekts namens konto.
         konto.Kontonummer = req.body.kontonummer
         konto.Kontoart = req.body.kontoart
         const bankleitzahl = 27000000
         const laenderkennung = "DE"
-        konto.Iban = iban.fromBBAN(laenderkennung, bankleitzahl + " " + konto.Kontonummer) 
+        konto.Iban = iban.fromBBAN(laenderkennung,bankleitzahl + " " + konto.Kontonummer)
+        
 
-// ... wird die kontoAnlegen.ejs gerendert.
+        // ... wird die kontoAnlegen.ejs gerendert.
 
-        res.render('kontoAnlegen.ejs', {   
-            meldung : "Das Konto " + konto.Kontonummer + "  wurde erfolgreich als " + konto.Kontoart + " angelegt."                           
+        res.render('kontoAnlegen.ejs', {                              
+            meldung : "Das " + konto.Kontoart + " mit der IBAN " + konto.Iban + " wurde erfolgreich angelegt."
         })
     }else{
-
-// Die login.ejs wird gerendert und als Response an den Browser übergeben.
-
+        // Die login.ejs wird gerendert 
+        // und als Response
+        // an den Browser übergeben.
         res.render('login.ejs', {                    
         })    
     }
 })
+
+app.get('/stammdatenPflegen',(req, res, next) => {   
+
+    let idKunde = req.cookies['istAngemeldetAls']
+    
+    if(idKunde){
+        console.log("Kunde ist angemeldet als " + idKunde)
+        
+        // ... dann wird kontoAnlegen.ejs gerendert.
+        
+        res.render('stammdatenPflegen.ejs', {    
+            meldung : ""                          
+        })
+    }else{
+        res.render('login.ejs', {                    
+        })    
+    }
+})
+
+app.post('/stammdatenPflegen',(req, res, next) => {   
+
+    let idKunde = req.cookies['istAngemeldetAls']
+    
+    if(idKunde){
+        console.log("Kunde ist angemeldet als " + idKunde)
+        
+        kunde.Nachname = req.body.nachname
+        kunde.Kennwort = req.body.kennwort
+        
+        res.render('stammdatenPflegen.ejs', {                              
+            meldung : "Die Stammdaten wurden geändert."
+        })
+    }else{
+        // Die login.ejs wird gerendert 
+        // und als Response
+        // an den Browser übergeben.
+        res.render('login.ejs', {                    
+        })    
+    }
+})
+
