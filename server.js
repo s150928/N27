@@ -16,7 +16,8 @@ class Kunde {
         this.Geburtsdatum
         this.Nachname
         this.Adresse
-        this.Geschlecht        
+        this.Geschlecht 
+        this.Mail       
     }
 }
 
@@ -32,11 +33,24 @@ kunde.Geburtsdatum = "1999-12-31"
 kunde.Nachname = "Müller"
 kunde.Vorname = "Hildegard"
 kunde.Geschlecht = "w"
+kunde.Mail = "Müller@Hildegard.de"
 
 const iban = require('iban')
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const mysql = require('mysql')
+
+const dbVerbindung = mysql.createConnection({
+    host: '10.40.38.110',
+    user: 'placematman',
+    password: 'BKB123456!',
+    db: 'dbn27',
+    port: '3306'
+})
+
+dbVerbindung.connect()
+
 const app = express()
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
@@ -157,6 +171,12 @@ app.post('/kontoAnlegen',(req, res, next) => {
         const laenderkennung = "DE"
         konto.Iban = iban.fromBBAN(laenderkennung,bankleitzahl + " " + konto.Kontonummer)
         
+        //Füge das Konto in die mysql-Datenbank ein
+
+        connection.query('INSERT INTO konto(iban,timestamp,anfangssaldo,kontoart) VALUES("'+ konto.Iban +'",now(),100,"'+ konto.Kontoart +'");', function (error, results, fields) {
+            if (error) throw error;
+            console.log('Das Konto wurde erfolgreich angelegt');
+        });
 
         // ... wird die kontoAnlegen.ejs gerendert.
 
@@ -196,12 +216,21 @@ app.post('/stammdatenPflegen',(req, res, next) => {
     
     if(idKunde){
         console.log("Kunde ist angemeldet als " + idKunde)
+
+        //Nur, wenn das input Namens Nachname nicht leer ist, wird der Nachname neu gesetzt.
         
-        kunde.Nachname = req.body.nachname
-        kunde.Kennwort = req.body.kennwort
+        if(req.body.nachname){
+            kunde.Nachname = req.body.nachname
+        }
+        if(req.body.kennwort){
+            kunde.Kennwort = req.body.kennwort
+        }
+        if(req.body.email){
+            kunde.Mail = req.body.email
+        }
         
         res.render('stammdatenPflegen.ejs', {                              
-            meldung : "Die Stammdaten wurden geändert."
+            meldung : "Die Stammdaten wurden geändert. Neuer Nachname: "+ kunde.nachname +" Neue Mail: "+ kunde.Mail
         })
     }else{
         // Die login.ejs wird gerendert 
