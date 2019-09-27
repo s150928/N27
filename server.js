@@ -56,7 +56,12 @@ dbVerbindung.connect(function(fehler){
     })
 })
 
-
+dbVerbindung.connect(function(fehler){
+    dbVerbindung.query('CREATE TABLE IF NOT EXISTS kontobewegung(iban VARCHAR(22), betrag DECIMAL(15,2), Verwendungszweck VARCHAR(200), timestamp TIMESTAMP);', function (fehler) {
+        if (fehler) throw fehler
+        console.log('Die Tabelle konto wurde erfolgreich angelegt.');
+    })
+})
 
 const app = express()
 app.set('view engine', 'ejs')
@@ -243,6 +248,53 @@ app.post('/stammdatenPflegen',(req, res, next) => {
         // Die login.ejs wird gerendert 
         // und als Response
         // an den Browser übergeben.
+        res.render('login.ejs', {                    
+        })    
+    }
+})
+
+app.get('/ueberweisungen',(req, res, next) => {   
+
+    let idKunde = req.cookies['istAngemeldetAls']
+    
+    if(idKunde){
+        console.log("Kunde ist angemeldet als " + idKunde)
+        
+        res.render('ueberweisungen.ejs', {    
+            meldung : ""                          
+        })
+    }else{
+        res.render('login.ejs', {                    
+        })    
+    }
+})
+
+app.post('/ueberweisungen',(req, res, next) => {   
+
+    let idKunde = req.cookies['istAngemeldetAls']
+    
+    if(idKunde){
+        console.log("Kunde ist angemeldet als " + idKunde)
+        
+        let ibanEmpfänger = req.body.ibanEmpfänger
+        let betrag = req.body.betrag
+        let verwendungszweck = req.body.verwendungszweck
+
+        dbVerbindung.query('INSERT INTO kontobewegung(Senderkonto));', function (fehler) {
+            if (fehler) throw fehler;
+            console.log('Der Betrag wurden erfolgreich überwiesen');
+        });
+
+        dbVerbindung.query('INSERT INTO kontobewegung(Empfängerkonto));', function (fehler) {
+            if (fehler) throw fehler;
+            console.log('Der Betrag wurden erfolgreich überwiesen');
+        });
+
+        res.render('ueberweisungen.ejs', {                              
+            meldung : "Der Betrag" + betrag + "wurde an" +ibanEmpfänger + "für" + verwendungszweck + "überwiesen."
+        })
+    }else{
+
         res.render('login.ejs', {                    
         })    
     }
