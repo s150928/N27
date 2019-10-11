@@ -1,3 +1,5 @@
+// Klassendefinition der Klasse Konto. Die Klasse ist der Bauplan, der alle relevanten eigenschaften entält.
+
 class Konto{
     constructor(){
         this.Kontonummer
@@ -21,7 +23,8 @@ class Kunde {
     }
 }
 
-// Deklaration und Instanziierung
+// Deklaration (let kunde) und Instanziierung =new Kunde()
+// Bei der Instanziierung werden Speicherzellen reserviert.
 
 let kunde = new Kunde()
 
