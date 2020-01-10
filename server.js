@@ -256,14 +256,14 @@ app.post('/stammdatenPflegen',(req, res, next) => {
     }
 })
 
-app.get('/ueberweisungen',(req, res, next) => {   
+app.get('/ueberweisen',(req, res, next) => {   
 
     let idKunde = req.cookies['istAngemeldetAls']
     
     if(idKunde){
         console.log("Kunde ist angemeldet als " + idKunde)
         
-        res.render('ueberweisungen.ejs', {    
+        res.render('ueberweisen.ejs', {    
             meldung : ""                          
         })
     }else{
@@ -272,7 +272,7 @@ app.get('/ueberweisungen',(req, res, next) => {
     }
 })
 
-app.post('/ueberweisungen',(req, res, next) => {   
+app.post('/ueberweisen',(req, res, next) => {   
 
     let idKunde = req.cookies['istAngemeldetAls']
     
@@ -293,7 +293,7 @@ app.post('/ueberweisungen',(req, res, next) => {
             console.log('Der Betrag wurden erfolgreich überwiesen');
         });
 
-        res.render('ueberweisungen.ejs', {                              
+        res.render('ueberweisen.ejs', {                              
             meldung : "Der Betrag" + betrag + "wurde an" +ibanEmpfänger + "für" + verwendungszweck + "überwiesen."
         })
     }else{
