@@ -303,3 +303,27 @@ app.post('/ueberweisen',(req, res, next) => {
     }
 })
 
+app.get('/kontostand',(req, res, next) => {   
+
+    let idKunde = req.cookies['istAngemeldetAls']
+    
+    if(idKunde){
+        console.log("Kunde ist angemeldet als " + idKunde)
+
+        // Hier muss die Datenbank abgefragt werden.
+
+        dbVerbindung.connect(function(fehler){
+            dbVerbindung.query('SELECT Anfangssaldo FROM konto WHERE iban = "DE1234";', function (fehler, result, fields) {
+                if (fehler) throw fehler
+                console.log('Der Saldo DE1234 ist:' + result[0].anfangssaldo)
+            })
+        })
+        
+        res.render('kontostand.ejs', {    
+            meldung : "Du bist arm du Lappen!!!!!!"                          
+        })
+    }else{
+        res.render('login.ejs', {                    
+        })    
+    }
+})
