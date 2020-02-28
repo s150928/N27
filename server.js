@@ -35,7 +35,7 @@ let kunde = new Kunde()
 
 // Initialisierung
 
-kunde.IdKunde = 47111
+kunde.IdKunde = 150928
 kunde.Kennwort = "123"
 kunde.Geburtsdatum = "1999-12-31"
 kunde.Nachname = "Müller"
@@ -58,16 +58,22 @@ const dbVerbindung = mysql.createConnection({
 })
 
 dbVerbindung.connect(function(fehler){
-    dbVerbindung.query('CREATE TABLE IF NOT EXISTS kunde(idKunde INT(11), vorname VARCHAR(45), nachname VARCHAR(45), kennwort VARCHAR(45), mail VARCHAR(45), PRIMARY KEY(idKunde));', function (fehler) {
-        if (fehler) throw fehler
-        console.log('Die Tabelle Kunde wurde erfolgreich angelegt.')
+    dbVerbindung.query('CREATE TABLE kunde(idKunde INT(11), vorname VARCHAR(45), nachname VARCHAR(45), kennwort VARCHAR(45), mail VARCHAR(45), PRIMARY KEY(idKunde));', function (fehler) {
+        if (fehler) {
+            console.log("Fehler: Tabelle Kunde existiert bereits und wird nicht angelegt.")
+        }else{
+            console.log('Tabelle Kunde wurde erfolgreich angelegt.')
+        }
     })
 })
 
 dbVerbindung.connect(function(fehler){
-    dbVerbindung.query('CREATE TABLE IF NOT EXISTS konto(iban VARCHAR(22), idKunde INT(11), anfangssaldo DECIMAL(15,2), kontoart VARCHAR(20), timestamp TIMESTAMP, PRIMARY KEY(iban));', function (fehler) {
-        if (fehler) throw fehler
-        console.log('Die Tabelle konto wurde erfolgreich angelegt.')
+    dbVerbindung.query('CREATE TABLE konto(iban VARCHAR(22), idKunde INT(11), anfangssaldo DECIMAL(15,2), kontoart VARCHAR(20), timestamp TIMESTAMP, PRIMARY KEY(iban));', function (fehler) {
+        if (fehler){
+            console.log("Fehler: Tabelle Konto existiert bereits und wird nicht angelegt.")
+        }else{
+            console.log('Tabelle Kunde wurde erfolgreich angelegt.')
+        }
     })
 })
 
@@ -205,8 +211,11 @@ app.post('/kontoAnlegen',(req, res, next) => {
         // Füge das Konto in die MySQL-Datenbank ein
     
         dbVerbindung.query('INSERT INTO konto(iban, idKunde, anfangssaldo, kontoart, timestamp) VALUES ("' + konto.Iban + '","' + idKunde + '",100,"' + konto.Kontoart + '",NOW());', function (fehler) {
-            if (fehler) throw fehler;
-            console.log('Das Konto wurde erfolgreich angelegt');
+            if (fehler) {
+                console.log ("Fehler: vermutlich existiert das Konto mit der IBAN " + konto.Iban + "bereits.")
+            }else{
+                console.log('Das Konto wurde erfolgreich angelegt');
+            }  
         })
 
         // ... wird die kontoAnlegen.ejs gerendert.
