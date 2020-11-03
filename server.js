@@ -1,3 +1,18 @@
+
+console.log("Schleife ausprobieren:")
+
+
+for(var z = 0; z < 2; z++){
+    for(var i = 0; i < 3; i++){
+        console.log(i);        
+    }
+    for(var i = 3; i >= 0; i--){
+        console.log(i);    
+    }
+}
+
+
+
 const mysql = require('mysql')
 const env = process.env.NODE_ENV || 'development';
 const config = require('./config')[env];
@@ -50,7 +65,6 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const validator = require("email-validator");
-
 
 const dbVerbindung = mysql.createConnection({
     host: config.database.host,
